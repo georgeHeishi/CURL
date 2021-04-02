@@ -1,0 +1,52 @@
+html, body {
+    width: 100%;
+    margin: 0;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 120px;
+}
+
+h1, a, p, label, input {
+    font-family: Roboto, sans-serif;
+}
+
+.site-footer {
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 20px;
+}
+
+.site-footer > .container {
+    text-align: center;
+}
+
+.site-footer ul, .site-header ul, .user ul {
+    list-style: none;
+    padding: 0;
+}
+
+.site-footer ul p, .site-header ul p, .user ul p {
+    margin-bottom: 0;
+}
+
+.site-header {
+    padding: 0;
+}
+
+.site-header a {
+    text-decoration: none;
+}
+
+.site-content {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
