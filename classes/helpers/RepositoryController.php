@@ -18,6 +18,8 @@ class RepositoryController
         $repoContent = $curlController->getContent($repositoryUrl);
         $repoContent = json_decode($repoContent);
 
+        $userActionController->prepareInsertQuery();
+
         foreach ($repoContent as $file) {
             $this->updateFile($userActionController, $file->path);
         }
@@ -26,8 +28,7 @@ class RepositoryController
 
     public function updateFile($userActionController, $fileUrl)
     {
-        echo "<br>";
-        print_r($fileUrl);
+
         $curlController = new CurlController();
         $lectureController = new LectureController();
         $lecture = new Lecture();
@@ -40,13 +41,13 @@ class RepositoryController
         if (!mb_detect_encoding($output, 'UTF-8', true)) {
             $output = mb_convert_encoding($output, 'UTF-8', 'UTF-16LE');
         }
-        $array = $curlController->deserializeFileContent($output);
+        $array = $curlController->deserializeContent($output);
 
         foreach ($array as $user) {
             $user->setLectureId(intval($id));
-            $userActionController->insertUserAction($user);
-
+            $userActionController->insertParams($user);
         }
+
         $curlController->closeUrl();
     }
 

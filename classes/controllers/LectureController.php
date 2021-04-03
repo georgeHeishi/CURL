@@ -10,7 +10,9 @@ class LectureController
     {
         $this->conn = (new Database())->getConnection();
     }
-    public function insertLecture(Lecture $lecture): ?string{
+
+    public function insertLecture(Lecture $lecture): ?string
+    {
         $stm = $this->conn->prepare("insert into lectures (timestamp)
                                         values (TIMESTAMP(:timestamp))");
 
@@ -19,7 +21,7 @@ class LectureController
         try {
             $stm->execute();
             return $this->conn->lastInsertId();
-        }catch (Exception $e){
+        } catch (Exception $e) {
 
 
             $stm = $this->conn->prepare("select id  from lectures where timestamp=TIMESTAMP(:timestamp)");
@@ -29,5 +31,14 @@ class LectureController
             $result = $stm->fetch();
             return $result["id"];
         }
+    }
+
+
+    public function getLectures(): array
+    {
+        $stm = $this->conn->prepare("select * from lectures");
+        $stm->execute();
+        $stm->setFetchMode(PDO::FETCH_CLASS, "Lecture");
+        return $stm->fetchAll();
     }
 }

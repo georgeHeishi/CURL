@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . "/../models/UserAction.php");
+require_once(__DIR__ . "/../controllers/UserActionController.php");
 
 class CurlController
 {
@@ -58,7 +59,8 @@ class CurlController
     }
 
     //returns array of UserAction objects
-    public function deserializeFileContent(string $string): array
+    //if $update = true, also push to db
+    public function deserializeContent(string $string): array
     {
         $lines = explode(PHP_EOL, $string);
         $array = array();
@@ -67,17 +69,17 @@ class CurlController
             $lineArray = str_getcsv($line, "\t");
 
             if ($index > 0 && count($lineArray) == 3) {
-                $userAction = new UserAction();
+                $user = new UserAction();
 
-                $userAction->setName($lineArray[0]);
-                $userAction->setAction($lineArray[1]);
+                $user->setName($lineArray[0]);
+                $user->setAction($lineArray[1]);
                 try {
-                    $userAction->setTimestamp(date('Y-m-d H:i:s', date_create_from_format('m/d/Y, H:i:s', $lineArray[2])->getTimestamp()));
+                    $user->setTimestamp(date('Y-m-d H:i:s', date_create_from_format('d/m/Y, H:i:s', $lineArray[2])->getTimestamp()));
                 } catch (Error $e) {
-                    $userAction->setTimestamp(date('Y-m-d H:i:s', date_create_from_format('m/d/Y, H:i:s A', $lineArray[2])->getTimestamp()));
+                    $user->setTimestamp(date('Y-m-d H:i:s', date_create_from_format('m/d/Y, H:i:s A', $lineArray[2])->getTimestamp()));
                 }
 
-                array_push($array, $userAction);
+                array_push($array, $user);
             }
         }
         return $array;

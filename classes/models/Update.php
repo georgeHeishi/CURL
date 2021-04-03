@@ -1,10 +1,12 @@
 <?php
 
 
-class Lecture
+class Update
 {
     private int $id;
+    private string $etag;
     private string $timestamp;
+
 
     /**
      * @return int
@@ -25,6 +27,22 @@ class Lecture
     /**
      * @return string
      */
+    public function getEtag(): string
+    {
+        return $this->etag;
+    }
+
+    /**
+     * @param string $etag
+     */
+    public function setEtag(string $etag): void
+    {
+        $this->etag = $etag;
+    }
+
+    /**
+     * @return string
+     */
     public function getTimestamp(): string
     {
         return $this->timestamp;
@@ -38,11 +56,4 @@ class Lecture
         $this->timestamp = $timestamp;
     }
 
-    public function getRowHead()
-    {
-        return '<th scope="col" id=lecture' . $this->id . '">
-                Prednáška č.' . $this->id . ' <br>
-                ' . date("d-m-Y", strtotime($this->timestamp)) . '
-            </th>';
-    }
 }
