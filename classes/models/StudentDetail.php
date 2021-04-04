@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__ . "/../models/AttendanceDetail.php");
 
 class StudentDetail
 {
@@ -80,6 +79,18 @@ class StudentDetail
         $this->totalTimeAttendance = $totalTimeAttendance;
     }
 
+    public function getAttendanceDetail($lectureId)
+    {
+        $array = array();
+        if (isset($this->attendance[intval($lectureId)])) {
+            foreach ($this->attendance[intval($lectureId)] as $key => $value) {
+                if (strcmp($key, "disconnected")) {
+                    $array[$key] = $value;
+                }
+            }
+        }
+        return $array;
+    }
 
     public function attendanceToColumns($columnCount): string
     {
@@ -89,14 +100,27 @@ class StudentDetail
 
         for ($i = 1; $i <= $columnCount; $i++) {
             $minutes = 0;
+            $color = "white";
             if (isset($this->attendance[$i])) {
                 foreach ($this->attendance[$i] as $key => $value) {
+
                     if (strcmp($key, "disconnected")) {
-                        $minutes += (strtotime($value) - strtotime($key)) / 60;
+                        if(strlen(trim($value))>0 && strlen(trim($key))){
+                            $minutes += (strtotime($value) - strtotime($key)) / 60;
+                        }
                     }
                 }
+                if ($this->attendance[$i]["disconnected"]) {
+                    $color = "white";
+                } else {
+                    $color = "red";
+                }
             }
-            $result = $result . "<td>" . $minutes . "</td>";
+            $result = $result . "<td>"
+                . "<a onclick='showLectureDetail(`" . $this->name . "`," . $i . ")' class='lecture-detail'  style='color: " . $color . "'>"
+                . number_format($minutes, 2)
+                . "</a>"
+                . "</td>";
             if ($minutes > 0) {
                 $this->totalAttendance++;
             }
@@ -112,8 +136,8 @@ class StudentDetail
 
             . $this->attendanceToColumns($columnCount) .
 
-            "<td>" . $this->totalAttendance . "</td>
-                    <td>" . $this->totalTimeAttendance . "</td>
+            "<td>" . number_format($this->totalAttendance, 2) . "</td>
+                    <td>" . number_format($this->totalTimeAttendance, 2) . "</td>
                 </tr>";
     }
 

@@ -50,3 +50,10 @@ h1, a, p, label, input {
     margin-left: auto;
     margin-right: auto;
 }
+
+.modal-content{
+    background-color: #212529;
+}
+.modal-title{
+    color: #fff;
+}

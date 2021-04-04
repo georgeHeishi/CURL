@@ -52,7 +52,7 @@ class UserActionController
 
     public function getAllNames(): array
     {
-        $stm = $this->conn->prepare("select name from user_actions group by name");
+        $stm = $this->conn->prepare("select name from user_actions group by name order by name");
         $stm->execute();
         $stm->setFetchMode(PDO::FETCH_ASSOC);
         return $stm->fetchAll();
@@ -74,8 +74,21 @@ class UserActionController
         $lastAction = "";
         $lastTimestamp = "";
 
+
+
         //velmi skaredy kod
         //pardon
+        //vytvori array so strukturou:
+
+        //array => {
+        //          [lecture_id] => {
+        //                              [date(joined)] => date(left)
+        //                               ...
+        //                              [disconnected] => bool
+        //                          }
+        //          ...
+        //}
+
         foreach ($result as $action) {
             if (intval($action["lecture_id"]) != $lastId) {
 
