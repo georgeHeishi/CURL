@@ -57,3 +57,11 @@ h1, a, p, label, input {
 .modal-title{
     color: #fff;
 }
+
+td,th{
+    text-align: center;
+}
+
+a:hover{
+    cursor: pointer;
+}

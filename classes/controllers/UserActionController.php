@@ -60,7 +60,7 @@ class UserActionController
 
     public function getStudentDetail($name): StudentDetail
     {
-        $stm = $this->conn->prepare("select lecture_id, action, timestamp from user_actions where name=:name order by timestamp ");
+        $stm = $this->conn->prepare("select lecture_id, action, timestamp from user_actions where name=:name order by lecture_id asc, timestamp asc ");
         $stm->bindParam(":name", $name);
         $stm->execute();
         $stm->setFetchMode(PDO::FETCH_ASSOC);
@@ -73,8 +73,6 @@ class UserActionController
         $lastId = 1;
         $lastAction = "";
         $lastTimestamp = "";
-
-
 
         //velmi skaredy kod
         //pardon
@@ -95,7 +93,7 @@ class UserActionController
                 if (!strcmp($lastAction, "Joined")) {
                     $attendances[$lastId][$lastTimestamp] = $this->getMaxTimeStamp($lastId);
                     $attendances[$lastId]["disconnected"] = false;
-                }else{
+                } else {
                     $attendances[$lastId]["disconnected"] = true;
                 }
 
@@ -106,8 +104,8 @@ class UserActionController
                 $attendances[intval($action["lecture_id"])][$action["timestamp"]] = "";
                 $lastAction = $action["action"];
                 $lastTimestamp = $action["timestamp"];
-            }else{
-                if(!strcmp($lastAction, "Joined")){
+            } else {
+                if (!strcmp($lastAction, "Joined")) {
                     $attendances[intval($action["lecture_id"])][$lastTimestamp] = $action["timestamp"];
                 }
                 $lastAction = $action["action"];
@@ -119,12 +117,13 @@ class UserActionController
         if (!strcmp($lastAction, "Joined")) {
             $attendances[$lastId][$lastTimestamp] = $this->getMaxTimeStamp($lastId);
             $attendances[$lastId]["disconnected"] = false;
-        }else{
+        } else {
             $attendances[$lastId]["disconnected"] = true;
 
         }
 
         $user->setAttendance($attendances);
+
 
         return $user;
     }
@@ -136,10 +135,30 @@ class UserActionController
         $stm->execute();
         $stm->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stm->fetch();
-        if(!$result){
+        if (!$result) {
             return null;
-        }else{
+        } else {
             return $result["max"];
+        }
+    }
+
+    public function getAttendanceCount($lecture_id): ?int
+    {
+        $stm = $this->conn->prepare("select count(*) as count
+                                            from (
+                                                    select name
+                                                        from user_actions
+                                                        where lecture_id = :lecture_id
+                                                    group by  name
+                                                ) as Z");
+        $stm->bindParam(":lecture_id", $lecture_id, PDO::PARAM_INT);
+        $stm->execute();
+        $stm->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stm->fetch();
+        if (!$result) {
+            return null;
+        } else {
+            return intval($result["count"]);
         }
     }
 }

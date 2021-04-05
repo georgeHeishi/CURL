@@ -38,6 +38,8 @@ class Lecture
         $this->timestamp = $timestamp;
     }
 
+
+
     public function getRowHead()
     {
         return '<th scope="col" id=lecture' . $this->id . '">

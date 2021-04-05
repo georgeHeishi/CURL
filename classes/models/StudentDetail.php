@@ -100,7 +100,7 @@ class StudentDetail
 
         for ($i = 1; $i <= $columnCount; $i++) {
             $minutes = 0;
-            $color = "white";
+            $color = "#212529";
             if (isset($this->attendance[$i])) {
                 foreach ($this->attendance[$i] as $key => $value) {
 
@@ -114,16 +114,16 @@ class StudentDetail
                     }
                 }
                 if ($this->attendance[$i]["disconnected"]) {
-                    $color = "white";
+                    $color = "#212529";
                 } else {
                     $color = "red";
                 }
             }
             $result = $result . "<td>"
-                . "<a onclick='showLectureDetail(`" . $this->name . "`," . $i . ")' class='lecture-detail'  style='color: " . $color . "'>"
-                . number_format($minutes, 2)
-                . "</a>"
-                . "</td>";
+                                . "<a onclick='showLectureDetail(`" . $this->name . "`," . $i . ")' class='lecture-detail'  style='color: " . $color . "'>"
+                                . number_format($minutes, 2)
+                                . "</a>"
+                            . "</td>";
             if ($minutes > 0) {
                 $this->totalAttendance++;
             }
@@ -137,9 +137,9 @@ class StudentDetail
         return "<tr>
                     <td>" . $this->name . "</td>"
 
-            . $this->attendanceToColumns($columnCount) .
+                    . $this->attendanceToColumns($columnCount) .
 
-            "<td>" . number_format($this->totalAttendance, 2) . "</td>
+                    "<td>" . number_format($this->totalAttendance, 2) . "</td>
                     <td>" . number_format($this->totalTimeAttendance, 2) . "</td>
                 </tr>";
     }

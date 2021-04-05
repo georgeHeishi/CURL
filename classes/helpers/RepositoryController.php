@@ -13,6 +13,8 @@ class RepositoryController
     {
         $curlController = new CurlController();
         $userActionController = new UserActionController();
+        $lectureController = new LectureController();
+        $lectureController->truncate();
         $userActionController->truncate();
 
         $repoContent = $curlController->getContent($repositoryUrl);
@@ -20,19 +22,22 @@ class RepositoryController
 
         $userActionController->prepareInsertQuery();
 
+        $lastId = 0;
+
         foreach ($repoContent as $file) {
-            $this->updateFile($userActionController, $file->path);
+            $lastId = $this->updateFile($userActionController, $file->path, $lastId);
         }
         $curlController->closeUrl();
     }
 
-    public function updateFile($userActionController, $fileUrl)
+    public function updateFile($userActionController, $fileUrl, $lastId): int
     {
 
         $curlController = new CurlController();
         $lectureController = new LectureController();
         $lecture = new Lecture();
         $lecture->setTimestamp($this->extractTimestamp($fileUrl));
+        $lecture->setId($lastId + 1);
 
         $id = $lectureController->insertLecture($lecture);
 
@@ -49,6 +54,8 @@ class RepositoryController
         }
 
         $curlController->closeUrl();
+
+        return $id;
     }
 
     public function extractTimestamp($fileUrl): bool|string

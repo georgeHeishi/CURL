@@ -52,6 +52,7 @@ $_SESSION["etag"] = trim($array["etag"]);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
+    <!-- DATATABLES -->
     <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
@@ -59,18 +60,34 @@ $_SESSION["etag"] = trim($array["etag"]);
     <link href="/CURL/assets/css/style.css" rel="stylesheet">
     <script src="/CURL/assets/js/script.js"></script>
     <script src="/CURL/assets/js/jquery-script.js"></script>
+
+
 </head>
 <body>
 <div class="container-fluid">
-    <?php include(__DIR__ . "/partials/header.php"); ?>
+    <div class="row mt-3 mb-1">
+        <header class="col-lg mb-2 site-header">
+            <div class="mt-2 d-flex flex-row">
+                <div class="p-2 flex-column" style="margin-left: 5%">
+                    <a href="https://wt98.fei.stuba.sk/CURL/"><h1 id="main-branding">Dochádzka</h1></a>
+                </div>
+                <div class="p-2 flex-column" style="margin-left: auto; margin-right: 5%">
+                    <h3>
+                        <?php echo "Bol vykonaný update dát? " . (($diff) ? "Áno" : "Nie"); ?>
+                    </h3>
+                </div>
+            </div>
+            <div class="mb-2 d-flex flex-row">
+                <div class="p-2 flex-column" style="margin-left: 5%">
+                    <a href="https://wt98.fei.stuba.sk/CURL/graph.php"><h1 id="main-branding">Graf</h1></a>
+                </div>
+            </div>
+        </header>
+    </div>
     <div class="row mt-5">
         <div class="col-lg ">
             <main class="site-content">
-                <div class="row mt-2">
-                    <div>
-                        <?php echo "Bol vykonaný update dát? " . (($diff) ? "Áno" : "Nie"); ?>
-                    </div>
-                </div>
+
                 <?php
                 $userController = new UserActionController();
                 $lectureController = new LectureController();
@@ -81,8 +98,8 @@ $_SESSION["etag"] = trim($array["etag"]);
                 ?>
                 <div class="row mt-4">
 
-                    <table class="table table-striped table-dark" id="students">
-                        <thead>
+                    <table class="table table-bordered table-striped" id="students">
+                        <thead class="table-dark">
                         <tr class="table-head">
                             <th scope="col" id="name">
                                 Meno a priezvisko
@@ -123,7 +140,7 @@ $_SESSION["etag"] = trim($array["etag"]);
                 <h5 class="modal-title" id="modal-title"></h5>
             </div>
             <div class="modal-body">
-                <h6 class="modal-title" id="lecture-title">Prednáška č. </h6>
+                <h6 class="modal-title">Prednáška č. <span id="lecture-title"></span></h6>
                 <br>
                 <table class="table table-striped table-dark">
                     <thead>

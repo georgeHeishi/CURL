@@ -30,7 +30,7 @@ function showLectureDetail(name, lecture_id) {
             modalTitle.innerHTML = data.name;
 
             const lectureTitle = document.getElementById("lecture-title");
-            lectureTitle.innerHTML += data.lecture_id;
+            lectureTitle.innerHTML = data.lecture_id;
 
             const attendance = document.getElementById("attendance-body");
             attendance.innerHTML = " ";
