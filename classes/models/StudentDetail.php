@@ -105,6 +105,9 @@ class StudentDetail
                 foreach ($this->attendance[$i] as $key => $value) {
 
                     if (strcmp($key, "disconnected")) {
+
+                        //ak zaznam pripojenia nema dvojicu(odpojenie) zaznam sa ignoruje
+                        //to znamena ak sa student pripojil a neodpojil a zaroven to nie je posledny zaznam pripojenia
                         if(strlen(trim($value))>0 && strlen(trim($key))){
                             $minutes += (strtotime($value) - strtotime($key)) / 60;
                         }
