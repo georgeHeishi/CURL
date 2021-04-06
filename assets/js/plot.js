@@ -17,9 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
             let lectureAttendances = [];
 
             Object.keys(data.result).forEach(function (key) {
-                lectures.push(key);
+                lectures.push("Prednáška č. " + key);
                 lectureAttendances.push(data.result[key]);
             });
+
             let plotData = [
                 {
                     x: lectures,
@@ -28,7 +29,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             ];
 
-            Plotly.newPlot('plot', plotData);
+            let layout = {
+                title: 'Účasť študentov na jednotlivých prednáškach',
+                xaxis: {
+                    title: 'Prednášky',
+                    titlefont: {
+                        size: 16,
+                    },
+                },
+                yaxis: {
+                    title: 'Účasť študentov',
+                    titlefont: {
+                        size: 16,
+                    },
+                },
+
+            }
+
+            Plotly.newPlot('plot', plotData, layout);
         });
 
 });
